@@ -32,9 +32,18 @@ A simple reminder for things you *should* do... eventually.
 
 ## Installation
 
+### The easy way
+
+1. Open the [Lazy Reminder](https://tox82.github.io/lazy-reminder/) app in your browser
+2. Enjoy!
+
+### The "I'm a developer, bro" way
+
 1. Clone the repository
 2. Open `index.html` in your browser
-3. Allow desktop notifications when prompted
+3. Make this better!
+4. Share your improvements with a pull request
+5. Enjoy!
 
 ## Requirements
 
