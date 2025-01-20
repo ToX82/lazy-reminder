@@ -8,7 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/light.css" rel="stylesheet">
+    <link href="css/dark.css" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         .animate-fade-in { animation: fadeIn 0.5s ease-in; }
@@ -50,9 +52,9 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+<body class="theme-transition">
     <div class="min-h-screen">
-        <nav class="bg-white dark:bg-gray-800 shadow-sm">
+        <nav class="theme-transition">
             <div class="container mx-auto px-4 py-3 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <svg class="w-8 h-8 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +62,7 @@
                     </svg>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">LazyReminder</h1>
                 </div>
-                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <button id="theme-toggle" class="p-2 rounded-lg theme-transition">
                     <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                     </svg>
@@ -68,33 +70,30 @@
             </div>
         </nav>
 
-        <div class="container mx-auto p-4">
+        <div class="container mx-auto p-4 base-content">
             <div class="max-w-2xl mx-auto">
-                <!-- Pulsante per aprire la modal -->
-                <button id="open-modal" class="mb-6 w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors transform hover:scale-105 duration-200">
+                <button id="open-modal" class="mb-6 w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium btn-hover theme-transition">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
                     Nuovo Promemoria
                 </button>
 
-                <!-- Lista dei promemoria -->
                 <div id="reminders-list" class="space-y-4 animate-fade-in">
                     <!-- I promemoria verranno inseriti qui dinamicamente -->
                 </div>
             </div>
         </div>
 
-        <!-- Modal -->
         <div class="modal-overlay" id="modal-overlay"></div>
-        <div id="reminder-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4 hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-95 opacity-0">
+        <div id="reminder-modal" class="modal fixed inset-0 flex items-center justify-center z-50 p-4">
+            <div class="modal-content rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 theme-transition">
                 <div class="p-6 space-y-6">
-                    <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-3">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100" id="modal-title">
+                    <div class="flex justify-between items-center border-b pb-3 theme-transition">
+                        <h3 class="text-xl font-semibold theme-transition" id="modal-title">
                             Nuovo Promemoria
                         </h3>
-                        <button type="button" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors" id="close-modal">
+                        <button type="button" class="theme-transition" id="close-modal">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -104,15 +103,15 @@
                     <form id="reminder-form" class="space-y-6">
                         <!-- Nome Promemoria -->
                         <div>
-                            <label for="reminder-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            <label for="reminder-name" class="block text-sm font-medium mb-1 theme-transition">
                                 Nome
                             </label>
-                            <input type="text" id="reminder-name" required class="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors" placeholder="Inserisci un nome per il promemoria">
+                            <input type="text" id="reminder-name" required class="block w-full rounded-lg shadow-sm sm:text-sm theme-transition" placeholder="Inserisci un nome per il promemoria">
                         </div>
 
                         <!-- Giorni -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label class="block text-sm font-medium mb-2 theme-transition">
                                 Giorni
                             </label>
                             <div class="flex flex-wrap gap-2" id="days-container">
@@ -163,7 +162,7 @@
 
                         <!-- Tipo di Orario -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label class="block text-sm font-medium mb-2 theme-transition">
                                 Tipo di Orario
                             </label>
                             <div class="grid grid-cols-3 gap-3" id="time-type-container">
@@ -189,7 +188,7 @@
                         </div>
 
                         <!-- Contenitore Orari -->
-                        <div id="time-container">
+                        <div id="time-container" class="theme-transition">
                             <!-- Orario Singolo -->
                             <div id="single-time" class="time-input bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                                 <div class="relative">
@@ -274,11 +273,11 @@
                         </div>
 
                         <!-- Pulsanti -->
-                        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <button type="button" id="cancel-reminder" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 rounded-lg transition-colors">
+                        <div class="flex justify-end space-x-3 pt-6 border-t theme-transition">
+                            <button type="button" id="cancel-reminder" class="px-4 py-2 text-sm font-medium rounded-lg theme-transition">
                                 Annulla
                             </button>
-                            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 rounded-lg transition-colors">
+                            <button type="submit" class="px-4 py-2 text-sm font-medium rounded-lg theme-transition">
                                 Salva
                             </button>
                         </div>

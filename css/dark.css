@@ -1,0 +1,132 @@
+/* Dark theme styles */
+.dark {
+    color-scheme: dark;
+}
+
+/* Background colors */
+.dark body {
+    background-color: #111827;
+    color: #F3F4F6;
+}
+
+.dark nav {
+    background-color: #1F2937;
+}
+
+.dark .modal-content,
+.dark .time-input,
+.dark .notification-modal {
+    background-color: #1F2937;
+    border-color: #374151;
+}
+
+/* Form elements */
+.dark input,
+.dark select,
+.dark textarea {
+    background-color: #374151;
+    border-color: #4B5563;
+    color: #F3F4F6;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+    border-color: #6366F1;
+    ring-color: #6366F1;
+}
+
+/* Buttons */
+.dark .btn-primary {
+    background-color: #6366F1;
+    color: #F3F4F6;
+}
+
+.dark .btn-primary:hover {
+    background-color: #4F46E5;
+}
+
+.dark .btn-secondary {
+    background-color: #4B5563;
+    color: #F3F4F6;
+}
+
+.dark .btn-secondary:hover {
+    background-color: #374151;
+}
+
+/* Cards and containers */
+.dark .reminder-card {
+    background-color: #1F2937;
+    border-color: #374151;
+}
+
+.dark .reminder-history {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* History dots */
+.dark .history-dot {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dark .history-dot.completed {
+    background-color: #34D399;
+}
+
+.dark .history-dot.rejected {
+    background-color: #F87171;
+}
+
+.dark .history-dot.postponed {
+    background-color: #FBBF24;
+}
+
+/* Day buttons */
+.dark .day-button input:checked + div {
+    background-color: rgba(99, 102, 241, 0.2);
+    border-color: #818CF8;
+}
+
+.dark .day-button input:checked + div span {
+    color: #A5B4FC;
+}
+
+/* Tooltips */
+.dark .history-dot::before {
+    background: #374151;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .history-dot::after {
+    border-top-color: #374151;
+}
+
+/* Modal overlay */
+.dark .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Text colors */
+.dark .text-gray-700 {
+    color: #D1D5DB;
+}
+
+.dark .text-gray-600 {
+    color: #9CA3AF;
+}
+
+.dark .text-gray-500 {
+    color: #6B7280;
+}
+
+/* Icons */
+.dark .icon-button {
+    color: #D1D5DB;
+}
+
+.dark .icon-button:hover {
+    color: #F3F4F6;
+    background-color: #374151;
+}

@@ -1,0 +1,324 @@
+/* Light theme */
+.light {
+    color-scheme: light;
+}
+
+/* Background colors */
+.light body {
+    background-color: #F9FAFB;
+    color: #111827;
+}
+
+.light nav {
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.light .modal-content,
+.light .time-input,
+.light .notification-modal {
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+}
+
+/* Form elements */
+.light input,
+.light select,
+.light textarea {
+    background-color: #FFFFFF;
+    border-color: #D1D5DB;
+    color: #111827;
+}
+
+.light input:focus,
+.light select:focus,
+.light textarea:focus {
+    border-color: #6366F1;
+    ring-color: #6366F1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Buttons */
+.light .btn-primary,
+.light button[type="submit"],
+.light #open-modal {
+    background-color: #6366F1;
+    color: #FFFFFF;
+    border-color: transparent;
+}
+
+.light .btn-primary:hover,
+.light button[type="submit"]:hover,
+.light #open-modal:hover {
+    background-color: #4F46E5;
+}
+
+.light .btn-primary:focus,
+.light button[type="submit"]:focus,
+.light #open-modal:focus {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.light .btn-secondary,
+.light button[type="button"].secondary {
+    background-color: #F3F4F6;
+    color: #374151;
+    border-color: #E5E7EB;
+}
+
+.light .btn-secondary:hover,
+.light button[type="button"].secondary:hover {
+    background-color: #E5E7EB;
+    border-color: #D1D5DB;
+}
+
+/* Cards and containers */
+.light .reminder-card {
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.light .reminder-history {
+    background-color: rgba(0, 0, 0, 0.02);
+    border: 1px solid #E5E7EB;
+}
+
+/* History dots */
+.light .history-dot {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.light .history-dot.completed {
+    background-color: #10B981;
+}
+
+.light .history-dot.rejected {
+    background-color: #EF4444;
+}
+
+.light .history-dot.postponed {
+    background-color: #F59E0B;
+}
+
+/* Day buttons */
+.light .day-button input:checked + div {
+    background-color: #EEF2FF;
+    border-color: #6366F1;
+}
+
+.light .day-button input:checked + div span {
+    color: #4F46E5;
+}
+
+.light .day-button div {
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+}
+
+.light .day-button:hover div {
+    border-color: #6366F1;
+    background-color: #F8FAFC;
+}
+
+/* Time type buttons */
+.light .time-type-btn {
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+}
+
+.light .time-type-btn:hover {
+    border-color: #6366F1;
+    background-color: #F8FAFC;
+}
+
+.light .time-type-btn.active {
+    background-color: #EEF2FF;
+    border-color: #6366F1;
+}
+
+.light .time-type-btn svg {
+    color: #6B7280;
+}
+
+.light .time-type-btn:hover svg,
+.light .time-type-btn.active svg {
+    color: #4F46E5;
+}
+
+.light .time-type-btn span {
+    color: #374151;
+}
+
+.light .time-type-btn:hover span,
+.light .time-type-btn.active span {
+    color: #4F46E5;
+}
+
+/* Tooltips */
+.light .history-dot::before {
+    background: #1F2937;
+    color: #FFFFFF;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.light .history-dot::after {
+    border-top-color: #1F2937;
+}
+
+/* Modal overlay */
+.light .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Text colors */
+.light .text-gray-700 {
+    color: #374151;
+}
+
+.light .text-gray-600 {
+    color: #4B5563;
+}
+
+.light .text-gray-500 {
+    color: #6B7280;
+}
+
+.light .text-gray-400 {
+    color: #9CA3AF;
+}
+
+.light .text-gray-300 {
+    color: #D1D5DB;
+}
+
+.light .text-indigo-600 {
+    color: #6366F1;
+}
+
+.light .text-indigo-500 {
+    color: #6366F1;
+}
+
+/* Icons */
+.light .icon-button {
+    color: #4B5563;
+    background-color: transparent;
+}
+
+.light .icon-button:hover {
+    color: #374151;
+    background-color: #F3F4F6;
+}
+
+/* Input fields */
+.light input[type="time"],
+.light input[type="number"] {
+    background-color: #FFFFFF;
+    border-color: #D1D5DB;
+}
+
+.light input[type="time"]:focus,
+.light input[type="number"]:focus {
+    border-color: #6366F1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Additional elements */
+.light .border-b {
+    border-color: #E5E7EB;
+}
+
+.light .shadow-sm {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.light .shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.light .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Focus states */
+.light .focus\:ring-2:focus {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.light .focus\:border-indigo-500:focus {
+    border-color: #6366F1;
+}
+
+/* Placeholder colors */
+.light ::placeholder {
+    color: #9CA3AF;
+}
+
+/* Selection colors */
+.light ::selection {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+}
+
+/* Modal and Dialog */
+.light .modal-content,
+.light .dialog-content {
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.light .modal-header,
+.light .dialog-header {
+    border-bottom-color: #E5E7EB;
+}
+
+.light .modal-title,
+.light .dialog-title {
+    color: #111827;
+}
+
+.light .modal-body,
+.light .dialog-body {
+    color: #374151;
+}
+
+.light .modal-footer,
+.light .dialog-footer {
+    border-top-color: #E5E7EB;
+}
+
+/* Modal specific */
+.light #reminder-modal .modal-content {
+    background-color: #FFFFFF;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform-origin: center;
+    transition: all 0.3s ease-out;
+}
+
+.light #reminder-modal.hidden .modal-content {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.light #reminder-modal.visible .modal-content {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Notification modal specific */
+.light .notification-modal {
+    background-color: #FFFFFF;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Dialog modal specific */
+.light .dialog-modal {
+    background-color: #FFFFFF;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}

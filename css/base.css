@@ -1,0 +1,260 @@
+/* Base styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Layout */
+.reminder-history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 8px;
+    min-height: 20px;
+    margin-top: 0px;
+}
+
+.history-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 0;
+    display: inline-block;
+    cursor: help;
+    position: relative;
+}
+
+/* Hover effects */
+.history-dot:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s ease;
+}
+
+.btn-hover {
+    transition: all 0.2s ease;
+}
+
+.btn-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Tooltip base */
+.history-dot::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 50;
+}
+
+.history-dot::after {
+    content: '';
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.history-dot:hover::before,
+.history-dot:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: 130%;
+}
+
+/* Modal base */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 32rem;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal.visible .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 40;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal structure */
+.modal-content {
+    position: relative;
+    padding: 1.5rem;
+    border-width: 1px;
+    border-radius: 0.75rem;
+    margin: 1rem;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom-width: 1px;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.75rem;
+}
+
+.modal-body {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top-width: 1px;
+    gap: 0.75rem;
+}
+
+/* Notification modal */
+.notification-modal {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 60;
+    padding: 1rem;
+    max-width: 24rem;
+    width: 100%;
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.notification-modal.visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Dialog modal */
+.dialog-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 55;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dialog-modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dialog-content {
+    width: 100%;
+    max-width: 28rem;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dialog-modal.visible .dialog-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Z-index hierarchy */
+.base-content {
+    position: relative;
+    z-index: 1;
+}
+
+.modal-overlay {
+    z-index: 40;
+}
+
+.modal {
+    z-index: 50;
+}
+
+.dialog-modal {
+    z-index: 55;
+}
+
+.notification-modal {
+    z-index: 60;
+}
+
+/* Animations */
+.animate-fade-in { animation: fadeIn 0.5s ease-in; }
+.animate-fade-out { animation: fadeOut 0.2s ease-out; }
+.animate-modal-open { animation: modalOpen 0.3s ease-out; }
+.animate-modal-close { animation: modalClose 0.2s ease-in; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes modalOpen {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+@keyframes modalClose {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(0.95); opacity: 0; }
+}
+
+/* Theme transitions */
+.theme-transition {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Day buttons */
+.day-button {
+    transition: all 0.2s ease;
+}

@@ -17,13 +17,13 @@ export class ThemeManager {
      */
     init() {
         // Imposta il tema iniziale
-        document.documentElement.className = StorageService.loadTheme();
+        const theme = StorageService.loadTheme() || 'light';
+        this.setTheme(theme);
 
         // Gestisce il cambio tema
         this.toggleButton.addEventListener('click', () => {
             const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-            document.documentElement.className = newTheme;
-            StorageService.saveTheme(newTheme);
+            this.setTheme(newTheme);
         });
     }
 
@@ -33,7 +33,8 @@ export class ThemeManager {
      */
     setTheme(theme) {
         if (theme === 'light' || theme === 'dark') {
-            document.documentElement.className = theme;
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(theme);
             StorageService.saveTheme(theme);
         }
     }
