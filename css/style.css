@@ -129,3 +129,24 @@
 .dark .history-dot::after {
     border-top-color: #374151;
 }
+
+/* Overlay per la modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 40;
+    pointer-events: none;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dark .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}

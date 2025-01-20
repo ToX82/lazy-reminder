@@ -23,17 +23,18 @@ export class Modal {
         this.cancelButton.addEventListener('click', () => this.close());
 
         // Chiudi quando si clicca fuori
-        this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) {
+        this.overlay.addEventListener('click', () => this.close());
+
+        // Chiudi con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !this.modal.classList.contains('hidden')) {
                 this.close();
             }
         });
 
-        // Chiudi con ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) {
-                this.close();
-            }
+        // Previeni la chiusura quando si clicca sulla modal stessa
+        this.modal.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
     }
 
@@ -49,7 +50,7 @@ export class Modal {
         this.modalContent.offsetHeight;
 
         // Anima overlay
-        this.overlay.classList.remove('opacity-0');
+        this.overlay.classList.add('active');
 
         // Anima modale
         this.modalContent.classList.remove('scale-95', 'opacity-0');
@@ -68,7 +69,7 @@ export class Modal {
         this.isOpen = false;
 
         // Anima overlay
-        this.overlay.classList.add('opacity-0');
+        this.overlay.classList.remove('active');
 
         // Anima modale
         this.modalContent.classList.remove('scale-100', 'opacity-100');
@@ -80,6 +81,7 @@ export class Modal {
             this.overlay.classList.add('hidden');
             // Ripristina lo scroll del body
             document.body.style.overflow = '';
+            this.form.reset();
         }, 300);
     }
 
