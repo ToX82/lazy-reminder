@@ -65,7 +65,8 @@ export class ReminderUI {
             lastAction.action === 'postponed' &&
             reminder.status === 'pending';
 
-        const content = `
+        // Genera il contenuto HTML
+        const mainContent = `
             <div class="flex items-start justify-between">
                 <div class="flex-1">
                     <div class="flex items-center space-x-2">
@@ -118,19 +119,24 @@ export class ReminderUI {
                         </svg>
                     </button>
                 </div>
-            </div>
-            ${reminder.history && reminder.history.length > 0 ? `
-                <div class="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
-                    <div class="reminder-history">
-                        ${reminder.history.map(action => `
-                            <span class="history-dot ${action.action}" title="${new Date(action.timestamp).toLocaleString()}"></span>
-                        `).join('')}
-                    </div>
-                </div>
-            ` : ''}
-        `;
+            </div>`;
 
-        element.innerHTML = content;
+        // Genera l'HTML dello storico
+        const historyContent = reminder.history && reminder.history.length > 0 ? `
+            <div class="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div class="reminder-history">
+                    ${reminder.history.map(action => `
+                        <div
+                            class="history-dot ${action.action}"
+                            data-tooltip="${new Date(action.timestamp).toLocaleString()} - ${this.getActionText(action)}"
+                        ></div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : '';
+
+        // Assegna il contenuto all'elemento
+        element.innerHTML = mainContent + historyContent;
 
         // Event listeners
         const editButton = element.querySelector('.edit-reminder');
@@ -155,7 +161,12 @@ export class ReminderUI {
         }
 
         // Debug log
-        console.log('Rendering reminder:', reminder.title, 'History:', reminder.history);
+        console.log('Rendering reminder:', {
+            title: reminder.title,
+            status: reminder.status,
+            history: reminder.history,
+            hasHistoryContent: !!historyContent
+        });
 
         return element;
     }
@@ -175,15 +186,15 @@ export class ReminderUI {
                     ${history.map(action => `
                         <div class="flex items-center text-sm">
                             <span class="w-4 h-4 mr-2 rounded-full ${
-                                action.type === 'completed' ? 'bg-green-500' :
-                                action.type === 'postponed' ? 'bg-yellow-500' :
+                                action.action === 'completed' ? 'bg-green-500' :
+                                action.action === 'postponed' ? 'bg-yellow-500' :
                                 'bg-red-500'
                             }"></span>
                             <span class="text-gray-600 dark:text-gray-400">${action.timestamp}</span>
                             <span class="mx-2">-</span>
                             <span class="text-gray-800 dark:text-gray-200">${
-                                action.type === 'completed' ? 'Completato' :
-                                action.type === 'postponed' ? `Rimandato di ${action.postponeMinutes} minuti` :
+                                action.action === 'completed' ? 'Completato' :
+                                action.action === 'postponed' ? `Rimandato di ${action.minutes} minuti` :
                                 'Saltato'
                             }</span>
                         </div>
@@ -314,9 +325,9 @@ export class ReminderUI {
         history.className = 'reminder-history';
 
         reminder.history.forEach(action => {
-            const dot = document.createElement('span');
+            const dot = document.createElement('div');
             dot.className = `history-dot ${action.action}`;
-            dot.title = new Date(action.timestamp).toLocaleString();
+            dot.setAttribute('data-tooltip', `${new Date(action.timestamp).toLocaleString()} - ${this.getActionText(action)}`);
             history.appendChild(dot);
         });
 
@@ -337,5 +348,23 @@ export class ReminderUI {
         }
 
         return card;
+    }
+
+    /**
+     * Restituisce il testo descrittivo per un'azione dello storico
+     * @param {Object} action L'azione da descrivere
+     * @returns {string} Il testo descrittivo dell'azione
+     */
+    getActionText(action) {
+        switch (action.action) {
+            case 'completed':
+                return 'Completato';
+            case 'rejected':
+                return 'Saltato';
+            case 'postponed':
+                return `Posticipato di ${action.minutes} minuti`;
+            default:
+                return action.action;
+        }
     }
 }

@@ -2,34 +2,60 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    padding: 5px;
-    min-height: 15px;
-    margin-top: 10px;
+    padding: 8px;
+    min-height: 20px;
+    margin-top: 0px;
+}
+
+.dark .reminder-history {
+    background-color: rgba(255, 255, 255, 0.03);
 }
 
 .history-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 1px;
-    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 0;
     display: inline-block;
+    cursor: help;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.dark .history-dot {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .history-dot.completed {
-    background-color: #4CAF50;
+    background-color: #10B981; /* verde */
 }
 
 .history-dot.rejected {
-    background-color: #F44336;
+    background-color: #EF4444; /* rosso */
 }
 
 .history-dot.postponed {
-    background-color: #FFC107;
+    background-color: #F59E0B; /* giallo */
 }
 
-/* Aggiunge un bordo sottile per migliorare la visibilità in dark mode */
-.dark .history-dot {
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+/* Dark mode */
+.dark .history-dot.completed {
+    background-color: #34D399;
+}
+
+.dark .history-dot.rejected {
+    background-color: #F87171;
+}
+
+.dark .history-dot.postponed {
+    background-color: #FBBF24;
+}
+
+/* Hover effect */
+.history-dot:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s ease;
 }
 
 /* Stili per i giorni della settimana */
@@ -53,4 +79,53 @@
 
 .dark .day-button input:checked + div span {
     color: #A5B4FC;
+}
+
+/* Tooltip personalizzato */
+.history-dot::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    background: #1F2937;
+    color: white;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    z-index: 50;
+}
+
+.history-dot::after {
+    content: '';
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #1F2937;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.history-dot:hover::before,
+.history-dot:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: 130%;
+}
+
+.dark .history-dot::before {
+    background: #374151;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .history-dot::after {
+    border-top-color: #374151;
 }

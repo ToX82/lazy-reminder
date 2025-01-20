@@ -17,7 +17,11 @@ export class StorageService {
             // Debug log
             console.log('Promemoria salvati:', {
                 count: reminders.length,
-                reminders: data
+                reminders: data.map(r => ({
+                    title: r.title,
+                    status: r.status,
+                    history: r.history
+                }))
             });
         } catch (error) {
             console.error('Errore durante il salvataggio dei promemoria:', error);
@@ -45,7 +49,7 @@ export class StorageService {
                 reminders: reminders.map(r => ({
                     title: r.title,
                     status: r.status,
-                    historyCount: r.history.length
+                    history: r.history
                 }))
             });
 

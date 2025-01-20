@@ -240,8 +240,8 @@ class App {
                         timeConfig,
                         days,
                         status: this.editingReminder.status,
-                        history: this.editingReminder.history,
-                        notifiedTimes: Array.from(this.editingReminder.notifiedTimes)
+                        history: this.editingReminder.history || [],
+                        notifiedTimes: Array.from(this.editingReminder.notifiedTimes || new Set())
                     });
                 }
                 this.editingReminder = null;
@@ -256,6 +256,15 @@ class App {
                 });
                 this.reminders.push(reminder);
             }
+
+            // Debug log
+            console.log('Promemoria salvato:', {
+                title,
+                timeConfig,
+                days,
+                status: this.editingReminder ? this.editingReminder.status : 'pending',
+                history: this.editingReminder ? this.editingReminder.history : []
+            });
 
             this.saveAndRender();
             this.resetForm();
@@ -284,6 +293,15 @@ class App {
     }
 
     /**
+     * Rifiuta un promemoria
+     * @param {Reminder} reminder
+     */
+    rejectReminder(reminder) {
+        reminder.reject();
+        this.saveAndRender();
+    }
+
+    /**
      * Posticipa un promemoria
      * @param {Reminder} reminder
      * @param {number} minutes - Minuti di posticipo (opzionale)
@@ -297,15 +315,6 @@ class App {
             reminder.postpone(parseInt(minutes));
             this.saveAndRender();
         }
-    }
-
-    /**
-     * Rifiuta un promemoria
-     * @param {Reminder} reminder
-     */
-    rejectReminder(reminder) {
-        reminder.reject();
-        this.saveAndRender();
     }
 
     /**
