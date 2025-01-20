@@ -1,74 +1,107 @@
-/* Dark theme styles */
+/* Dark theme */
 .dark {
     color-scheme: dark;
 }
 
 /* Background colors */
 .dark body {
-    background-color: #111827;
+    background-color: #0F172A;
     color: #F3F4F6;
 }
 
 .dark nav {
-    background-color: #1F2937;
+    background-color: #1E293B;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .dark .modal-content,
 .dark .time-input,
 .dark .notification-modal {
-    background-color: #1F2937;
-    border-color: #374151;
+    background-color: #1E293B;
+    border-color: #334155;
 }
 
 /* Form elements */
 .dark input,
 .dark select,
 .dark textarea {
-    background-color: #374151;
-    border-color: #4B5563;
+    background-color: #1E293B;
+    border-color: #334155;
     color: #F3F4F6;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.dark input:hover,
+.dark select:hover,
+.dark textarea:hover {
+    border-color: #475569;
+    background-color: #1E293B;
 }
 
 .dark input:focus,
 .dark select:focus,
 .dark textarea:focus {
-    border-color: #6366F1;
-    ring-color: #6366F1;
+    border-color: #818CF8;
+    background-color: #1E293B;
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25);
+    outline: none;
 }
 
 /* Buttons */
-.dark .btn-primary {
+.dark .btn-primary,
+.dark button[type="submit"],
+.dark #open-modal {
     background-color: #6366F1;
     color: #F3F4F6;
+    border-color: transparent;
 }
 
-.dark .btn-primary:hover {
+.dark .btn-primary:hover,
+.dark button[type="submit"]:hover,
+.dark #open-modal:hover {
     background-color: #4F46E5;
 }
 
-.dark .btn-secondary {
-    background-color: #4B5563;
-    color: #F3F4F6;
+.dark .btn-primary:focus,
+.dark button[type="submit"]:focus,
+.dark #open-modal:focus {
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25);
 }
 
-.dark .btn-secondary:hover {
-    background-color: #374151;
+.dark .btn-secondary,
+.dark button[type="button"].secondary {
+    background-color: #334155;
+    color: #F3F4F6;
+    border-color: #475569;
+}
+
+.dark .btn-secondary:hover,
+.dark button[type="button"].secondary:hover {
+    background-color: #475569;
+    border-color: #64748B;
 }
 
 /* Cards and containers */
-.dark .reminder-card {
-    background-color: #1F2937;
-    border-color: #374151;
+.dark .reminder-card,
+.dark [class*="bg-white"] {
+    background-color: #1E293B !important;
+    border-color: #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .dark .reminder-history {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: transparent;
+    border: none;
 }
 
 /* History dots */
 .dark .history-dot {
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .dark .history-dot.completed {
@@ -84,8 +117,20 @@
 }
 
 /* Day buttons */
+.dark .day-button div {
+    width: 3.5rem !important;
+    height: 2.5rem !important;
+    background-color: #1E293B;
+    border-color: #334155;
+}
+
+.dark .day-button:hover div {
+    border-color: #818CF8;
+    background-color: #334155;
+}
+
 .dark .day-button input:checked + div {
-    background-color: rgba(99, 102, 241, 0.2);
+    background-color: rgba(99, 102, 241, 0.15);
     border-color: #818CF8;
 }
 
@@ -93,40 +138,269 @@
     color: #A5B4FC;
 }
 
+.dark .day-button span {
+    font-size: 0.813rem;
+}
+
+/* Time type buttons */
+.dark .time-type-btn {
+    background-color: #1E293B;
+    border-color: #334155;
+}
+
+.dark .time-type-btn:hover {
+    border-color: #818CF8;
+    background-color: #334155;
+}
+
+.dark .time-type-btn.active {
+    background-color: rgba(99, 102, 241, 0.15);
+    border-color: #818CF8;
+}
+
+.dark .time-type-btn svg {
+    color: #94A3B8;
+}
+
+.dark .time-type-btn:hover svg,
+.dark .time-type-btn.active svg {
+    color: #A5B4FC;
+}
+
+.dark .time-type-btn span {
+    color: #F3F4F6;
+}
+
+.dark .time-type-btn:hover span,
+.dark .time-type-btn.active span {
+    color: #A5B4FC;
+}
+
 /* Tooltips */
 .dark .history-dot::before {
-    background: #374151;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    background: #334155;
+    color: #F3F4F6;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 .dark .history-dot::after {
-    border-top-color: #374151;
+    border-top-color: #334155;
 }
 
 /* Modal overlay */
 .dark .modal-overlay {
     background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
 }
 
 /* Text colors */
 .dark .text-gray-700 {
-    color: #D1D5DB;
+    color: #F3F4F6;
 }
 
 .dark .text-gray-600 {
-    color: #9CA3AF;
+    color: #E5E7EB;
 }
 
 .dark .text-gray-500 {
+    color: #D1D5DB;
+}
+
+.dark .text-gray-400 {
+    color: #9CA3AF;
+}
+
+.dark .text-gray-300 {
     color: #6B7280;
+}
+
+.dark .text-indigo-600 {
+    color: #818CF8;
+}
+
+.dark .text-indigo-500 {
+    color: #818CF8;
 }
 
 /* Icons */
 .dark .icon-button {
     color: #D1D5DB;
+    background-color: transparent;
 }
 
 .dark .icon-button:hover {
     color: #F3F4F6;
-    background-color: #374151;
+    background-color: #334155;
+}
+
+/* Input fields */
+.dark input[type="time"],
+.dark input[type="number"] {
+    background-color: #1E293B;
+    border-color: #334155;
+    padding-left: 2.5rem;
+}
+
+.dark input[type="time"]:focus,
+.dark input[type="number"]:focus {
+    border-color: #818CF8;
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25);
+}
+
+/* Additional elements */
+.dark .border-b {
+    border-color: #334155;
+}
+
+.dark .shadow-sm {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dark .shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dark .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Focus states */
+.dark .focus\:ring-2:focus {
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25);
+}
+
+.dark .focus\:border-indigo-500:focus {
+    border-color: #818CF8;
+}
+
+/* Placeholder colors */
+.dark ::placeholder {
+    color: #64748B;
+}
+
+/* Selection colors */
+.dark ::selection {
+    background-color: rgba(99, 102, 241, 0.15);
+    color: #A5B4FC;
+}
+
+/* Modal and Dialog */
+.dark .modal-content,
+.dark .dialog-content {
+    background-color: #1E293B;
+    border-color: #334155;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+.dark .modal-header,
+.dark .dialog-header {
+    border-bottom-color: #334155;
+}
+
+.dark .modal-title,
+.dark .dialog-title {
+    color: #F3F4F6;
+}
+
+.dark .modal-body,
+.dark .dialog-body {
+    color: #E5E7EB;
+}
+
+.dark .modal-footer,
+.dark .dialog-footer {
+    border-top-color: #334155;
+}
+
+/* Modal specific */
+.dark #reminder-modal .modal-content {
+    background-color: #1E293B;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    transform-origin: center;
+    transition: all 0.3s ease-out;
+}
+
+.dark #reminder-modal.hidden .modal-content {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.dark #reminder-modal.visible .modal-content {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Notification modal specific */
+.dark .notification-modal {
+    background-color: #1E293B;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Dialog modal specific */
+.dark .dialog-modal {
+    background-color: #1E293B;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Generic text colors */
+.dark .theme-transition {
+    color: #F3F4F6;
+}
+
+.dark label,
+.dark .font-medium {
+    color: #E5E7EB;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #F3F4F6;
+}
+
+/* Icons in reminder cards */
+.dark .reminder-card svg,
+.dark [class*="bg-white"] svg {
+    color: #94A3B8;
+    transition: color 0.2s ease;
+}
+
+.dark .complete-reminder svg {
+    color: #34D399;
+}
+
+.dark .complete-reminder:hover svg {
+    color: #10B981;
+}
+
+.dark .reject-reminder svg,
+.dark .delete-reminder svg {
+    color: #F87171;
+}
+
+.dark .reject-reminder:hover svg,
+.dark .delete-reminder:hover svg {
+    color: #EF4444;
+}
+
+.dark .postpone-reminder svg {
+    color: #FBBF24;
+}
+
+.dark .postpone-reminder:hover svg {
+    color: #F59E0B;
+}
+
+.dark .edit-reminder svg {
+    color: #60A5FA;
+}
+
+.dark .edit-reminder:hover svg {
+    color: #3B82F6;
+}
+
+/* Empty state icon */
+.dark .text-gray-400 svg {
+    color: #4B5563;
 }
