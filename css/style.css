@@ -1,0 +1,56 @@
+.reminder-history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 5px;
+    min-height: 15px;
+    margin-top: 10px;
+}
+
+.history-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 1px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.history-dot.completed {
+    background-color: #4CAF50;
+}
+
+.history-dot.rejected {
+    background-color: #F44336;
+}
+
+.history-dot.postponed {
+    background-color: #FFC107;
+}
+
+/* Aggiunge un bordo sottile per migliorare la visibilità in dark mode */
+.dark .history-dot {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Stili per i giorni della settimana */
+.day-button {
+    transition: all 0.2s ease;
+}
+
+.day-button input:checked + div {
+    background-color: #EEF2FF;
+    border-color: #6366F1;
+}
+
+.dark .day-button input:checked + div {
+    background-color: rgba(99, 102, 241, 0.2);
+    border-color: #818CF8;
+}
+
+.day-button input:checked + div span {
+    color: #4F46E5;
+}
+
+.dark .day-button input:checked + div span {
+    color: #A5B4FC;
+}

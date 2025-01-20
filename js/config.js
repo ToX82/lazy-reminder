@@ -28,12 +28,36 @@ export const Config = {
     // Chiavi per il localStorage
     storage: {
         reminders: 'reminders',
-        theme: 'theme'
+        theme: 'theme',
+        isDevelopment: 'isDevelopment'
     },
 
     // Configurazione delle notifiche
     notifications: {
-        checkInterval: 60000, // 1 minuto
-        resetInterval: 60000  // 1 minuto
+        // In development usiamo intervalli più brevi
+        development: {
+            checkInterval: 10000,      // Intervallo di controllo delle notifiche (10 secondi)
+            resetInterval: 60000,      // Intervallo per resettare lo stato delle notifiche (1 minuto)
+            gracePeriod: 5000,        // Periodo di tolleranza prima dell'orario previsto (5 secondi)
+            maxMissedTime: 300000,    // Tempo massimo di ritardo per notifiche perse (5 minuti)
+            debug: true               // Debug sempre attivo in development
+        },
+        // In production usiamo intervalli più lunghi per risparmiare risorse
+        production: {
+            checkInterval: 30000,     // Intervallo di controllo delle notifiche (30 secondi)
+            resetInterval: 60000,     // Intervallo per resettare lo stato delle notifiche (1 minuto)
+            gracePeriod: 30000,       // Periodo di tolleranza prima dell'orario previsto (30 secondi)
+            maxMissedTime: 300000,    // Tempo massimo di ritardo per notifiche perse (5 minuti)
+            debug: false              // Debug disattivato in production
+        }
+    },
+
+    /**
+     * Restituisce la configurazione delle notifiche in base all'ambiente
+     * @returns {Object}
+     */
+    getNotificationConfig() {
+        const isDevelopment = localStorage.getItem(this.storage.isDevelopment) === 'true';
+        return isDevelopment ? this.notifications.development : this.notifications.production;
     }
 };

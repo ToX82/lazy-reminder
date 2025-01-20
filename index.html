@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b6cb0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E">
     <title>LazyReminder</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -83,153 +84,206 @@
             </div>
         </div>
 
+        <!-- Modal Overlay -->
+        <div id="modal-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"></div>
+
         <!-- Modal -->
-        <div id="reminder-modal" class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 hidden transition-opacity z-50">
-            <div class="fixed inset-0 overflow-y-auto">
-                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <div class="modal-content relative transform overflow-hidden rounded-xl bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
-                        <div class="absolute top-0 right-0 pt-4 pr-4">
-                            <button id="close-modal" class="btn-hover text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg p-1">
-                                <span class="sr-only">Chiudi</span>
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
+        <div id="reminder-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-95 opacity-0">
+                <div class="p-6 space-y-6">
+                    <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100" id="modal-title">
+                            Nuovo Promemoria
+                        </h3>
+                        <button type="button" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors" id="close-modal">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form id="reminder-form" class="space-y-6">
+                        <!-- Nome Promemoria -->
+                        <div>
+                            <label for="reminder-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Nome
+                            </label>
+                            <input type="text" id="reminder-name" required class="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors" placeholder="Inserisci un nome per il promemoria">
                         </div>
 
-                        <!-- Form del promemoria -->
-                        <div id="reminder-form" class="p-6 sm:p-8">
-                            <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Nuovo Promemoria</h2>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="reminder-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Titolo</label>
-                                    <input type="text" id="reminder-title" class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
+                        <!-- Giorni -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Giorni
+                            </label>
+                            <div class="flex flex-wrap gap-2" id="days-container">
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Monday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Lun</span>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Tuesday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Mar</span>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Wednesday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Mer</span>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Thursday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Gio</span>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Friday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Ven</span>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Saturday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Sab</span>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center day-button">
+                                    <input type="checkbox" value="Sunday" class="sr-only peer">
+                                    <div class="w-16 h-10 flex items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 peer-checked:bg-indigo-50 dark:peer-checked:bg-indigo-900/20 peer-checked:border-indigo-500 dark:peer-checked:border-indigo-400 peer-focus:ring-2 peer-focus:ring-indigo-500 dark:peer-focus:ring-indigo-400 transition-all cursor-pointer">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 peer-checked:text-indigo-600 dark:peer-checked:text-indigo-400">Dom</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Tipo di Orario -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Tipo di Orario
+                            </label>
+                            <div class="grid grid-cols-3 gap-3" id="time-type-container">
+                                <button type="button" data-type="single" class="time-type-btn flex flex-col items-center justify-center p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-indigo-500 dark:hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all">
+                                    <svg class="h-6 w-6 text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Singolo</span>
+                                </button>
+                                <button type="button" data-type="interval" class="time-type-btn flex flex-col items-center justify-center p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-indigo-500 dark:hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all">
+                                    <svg class="h-6 w-6 text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Intervallo</span>
+                                </button>
+                                <button type="button" data-type="multiple" class="time-type-btn flex flex-col items-center justify-center p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-indigo-500 dark:hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all">
+                                    <svg class="h-6 w-6 text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    <span class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Multiplo</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contenitore Orari -->
+                        <div id="time-container">
+                            <!-- Orario Singolo -->
+                            <div id="single-time" class="time-input bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                                <div class="relative">
+                                    <input type="time" id="reminder-time-single" class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pianificazione Orari</label>
-                                    <div class="flex items-center space-x-2 mb-4">
-                                        <div class="relative w-full">
-                                            <select id="time-type" class="appearance-none w-full rounded-lg border-gray-300 dark:border-gray-600 pl-4 pr-10 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
-                                                <option value="single">⏰ Orario singolo</option>
-                                                <option value="interval">⌛ Intervallo orario</option>
-                                                <option value="multiple">📋 Orari multipli</option>
-                                            </select>
-                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                </svg>
-                                            </div>
+                            </div>
+
+                            <!-- Intervallo Orario -->
+                            <div id="interval-time" class="time-input hidden bg-white dark:bg-gray-800 rounded-lg p-4 space-y-4 border border-gray-200 dark:border-gray-700">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dalle</label>
+                                        <input type="time" id="reminder-time-start" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                                        <div class="absolute bottom-1 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
                                         </div>
                                     </div>
-
-                                    <!-- Orario Singolo -->
-                                    <div id="single-time" class="time-input bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-                                        <div class="relative">
-                                            <input type="time" id="reminder-time-single" class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="relative">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alle</label>
+                                        <input type="time" id="reminder-time-end" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                                        <div class="absolute bottom-1 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ripeti ogni</label>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="relative flex-1">
+                                            <select id="interval-preset" class="appearance-none w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 pr-10 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                                                <option value="30">30 minuti</option>
+                                                <option value="60" selected>1 ora</option>
+                                                <option value="120">2 ore</option>
+                                                <option value="180">3 ore</option>
+                                                <option value="240">4 ore</option>
+                                                <option value="custom">Personalizzato</option>
+                                            </select>
+                                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Intervallo Orario -->
-                                    <div id="interval-time" class="time-input hidden bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 space-y-4">
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div class="relative">
-                                                <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Dalle</label>
-                                                <input type="time" id="reminder-time-start" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-                                                <div class="absolute bottom-1 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <div class="relative">
-                                                <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Alle</label>
-                                                <input type="time" id="reminder-time-end" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-                                                <div class="absolute bottom-1 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Ripeti ogni</label>
-                                            <div class="flex items-center space-x-3">
-                                                <div class="relative flex-1">
-                                                    <select id="interval-preset" class="appearance-none w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 pr-10 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
-                                                        <option value="30">30 minuti</option>
-                                                        <option value="60" selected>1 ora</option>
-                                                        <option value="120">2 ore</option>
-                                                        <option value="180">3 ore</option>
-                                                        <option value="240">4 ore</option>
-                                                        <option value="custom">Personalizzato</option>
-                                                    </select>
-                                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                        <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="custom-interval" class="hidden mt-2">
-                                                <div class="flex items-center space-x-2">
-                                                    <input type="number" id="reminder-interval" min="1" value="60" class="block w-24 rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-                                                    <span class="text-sm text-gray-700 dark:text-gray-300">minuti</span>
-                                                </div>
-                                            </div>
+                                    <div id="custom-interval" class="hidden mt-2">
+                                        <div class="flex items-center space-x-2">
+                                            <input type="number" id="reminder-interval" min="1" value="60" class="block w-24 rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300">minuti</span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <!-- Orari Multipli -->
-                                    <div id="multiple-times" class="time-input hidden bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-                                        <div id="times-container" class="space-y-2">
-                                            <div class="relative">
-                                                <input type="time" class="multiple-time block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-                                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="button" id="add-time" class="mt-3 inline-flex items-center px-3.5 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            <!-- Orari Multipli -->
+                            <div id="multiple-times" class="time-input hidden bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                                <div id="times-container" class="space-y-2">
+                                    <div class="relative">
+                                        <input type="time" class="multiple-time block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                            Aggiungi orario
-                                        </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label for="reminder-days" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Giorni della settimana</label>
-                                    <select id="reminder-days" multiple class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-                                        <option value="Monday">Lunedì</option>
-                                        <option value="Tuesday">Martedì</option>
-                                        <option value="Wednesday">Mercoledì</option>
-                                        <option value="Thursday">Giovedì</option>
-                                        <option value="Friday">Venerdì</option>
-                                        <option value="Saturday">Sabato</option>
-                                        <option value="Sunday">Domenica</option>
-                                    </select>
-                                </div>
-                                <button id="add-reminder" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors transform hover:scale-105 duration-200">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <button type="button" id="add-time" class="mt-3 inline-flex items-center px-3.5 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
-                                    Aggiungi Promemoria
+                                    Aggiungi orario
                                 </button>
                             </div>
                         </div>
-                    </div>
+
+                        <!-- Pulsanti -->
+                        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                            <button type="button" id="cancel-reminder" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 rounded-lg transition-colors">
+                                Annulla
+                            </button>
+                            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 rounded-lg transition-colors">
+                                Salva
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

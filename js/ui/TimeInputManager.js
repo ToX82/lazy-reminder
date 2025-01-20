@@ -4,7 +4,7 @@
 export class TimeInputManager {
     /**
      * @param {Object} config - Configurazione degli input
-     * @param {string} config.typeSelectId - ID del select per il tipo di input
+     * @param {string} config.timeTypeContainerId - ID del container dei pulsanti tipo orario
      * @param {string} config.singleTimeId - ID dell'input per orario singolo
      * @param {string} config.intervalStartId - ID dell'input per inizio intervallo
      * @param {string} config.intervalEndId - ID dell'input per fine intervallo
@@ -14,7 +14,8 @@ export class TimeInputManager {
      * @param {string} config.addTimeButtonId - ID del pulsante per aggiungere orari
      */
     constructor(config) {
-        this.typeSelect = document.getElementById(config.typeSelectId);
+        this.timeTypeContainer = document.getElementById(config.timeTypeContainerId);
+        this.timeTypeButtons = this.timeTypeContainer.querySelectorAll('.time-type-btn');
         this.singleTimeInput = document.getElementById(config.singleTimeId);
         this.intervalTimeStart = document.getElementById(config.intervalStartId);
         this.intervalTimeEnd = document.getElementById(config.intervalEndId);
@@ -28,6 +29,7 @@ export class TimeInputManager {
         this.intervalTimeContainer = document.getElementById('interval-time');
         this.multipleTimesContainer = document.getElementById('multiple-times');
 
+        this.selectedType = 'single';
         this.init();
     }
 
@@ -35,17 +37,51 @@ export class TimeInputManager {
      * Inizializza gli event listener
      */
     init() {
-        this.typeSelect.addEventListener('change', () => this.handleTypeChange());
+        // Gestione click sui pulsanti tipo orario
+        this.timeTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const type = button.dataset.type;
+                this.handleTypeChange(type);
+                this.updateTypeButtons(type);
+            });
+        });
+
         this.intervalPreset.addEventListener('change', () => this.handlePresetChange());
         this.addTimeButton.addEventListener('click', () => this.addTimeInput());
+
+        // Imposta il tipo iniziale
+        this.handleTypeChange('single');
+        this.updateTypeButtons('single');
+    }
+
+    /**
+     * Aggiorna lo stato visivo dei pulsanti
+     * @param {string} selectedType - Il tipo selezionato
+     */
+    updateTypeButtons(selectedType) {
+        this.selectedType = selectedType;
+        this.timeTypeButtons.forEach(button => {
+            if (button.dataset.type === selectedType) {
+                button.classList.add('border-indigo-500', 'dark:border-indigo-400');
+                button.classList.remove('border-gray-200', 'dark:border-gray-600');
+                button.querySelector('svg').classList.remove('text-gray-400');
+                button.querySelector('svg').classList.add('text-indigo-500', 'dark:text-indigo-400');
+            } else {
+                button.classList.remove('border-indigo-500', 'dark:border-indigo-400');
+                button.classList.add('border-gray-200', 'dark:border-gray-600');
+                button.querySelector('svg').classList.add('text-gray-400');
+                button.querySelector('svg').classList.remove('text-indigo-500', 'dark:text-indigo-400');
+            }
+        });
     }
 
     /**
      * Gestisce il cambio del tipo di input
+     * @param {string} type - Il tipo selezionato
      */
-    handleTypeChange() {
+    handleTypeChange(type) {
         this.timeInputs.forEach(input => input.classList.add('hidden'));
-        switch(this.typeSelect.value) {
+        switch(type) {
             case 'single':
                 this.singleTimeContainer.classList.remove('hidden');
                 break;
@@ -72,10 +108,17 @@ export class TimeInputManager {
      */
     addTimeInput() {
         const timeInput = document.createElement('div');
-        timeInput.className = 'flex items-center space-x-2';
+        timeInput.className = 'relative flex items-center space-x-2';
         timeInput.innerHTML = `
-            <input type="time" class="multiple-time mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
-            <button type="button" class="remove-time p-1 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+            <div class="relative flex-1">
+                <input type="time" class="multiple-time block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <button type="button" class="remove-time p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -94,7 +137,7 @@ export class TimeInputManager {
      * @returns {Object}
      */
     getTimeConfig() {
-        switch(this.typeSelect.value) {
+        switch(this.selectedType) {
             case 'single':
                 return {
                     type: 'single',
@@ -122,8 +165,8 @@ export class TimeInputManager {
      * @param {Object} timeConfig
      */
     setTimeConfig(timeConfig) {
-        this.typeSelect.value = timeConfig.type;
-        this.handleTypeChange();
+        this.handleTypeChange(timeConfig.type);
+        this.updateTypeButtons(timeConfig.type);
 
         switch(timeConfig.type) {
             case 'single':
@@ -157,15 +200,22 @@ export class TimeInputManager {
      * Resetta tutti gli input
      */
     reset() {
-        this.typeSelect.value = 'single';
-        this.handleTypeChange();
+        this.handleTypeChange('single');
+        this.updateTypeButtons('single');
         this.singleTimeInput.value = '';
         this.intervalTimeStart.value = '';
         this.intervalTimeEnd.value = '';
         this.intervalMinutes.value = '60';
         this.timesContainer.innerHTML = `
-            <div class="flex items-center space-x-2">
-                <input type="time" class="multiple-time mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors">
+            <div class="relative flex items-center space-x-2">
+                <div class="relative flex-1">
+                    <input type="time" class="multiple-time block w-full rounded-lg border-gray-300 dark:border-gray-600 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm transition-colors">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
         `;
     }
