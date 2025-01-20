@@ -26,9 +26,9 @@ class App {
      * Inizializza i servizi
      */
     initializeServices() {
-        // Imposta la modalità development se non è già impostata
+        // Imposta la modalità production di default
         if (!localStorage.getItem(Config.storage.isDevelopment)) {
-            localStorage.setItem(Config.storage.isDevelopment, 'true'); // Per il testing
+            localStorage.setItem(Config.storage.isDevelopment, 'false');
         }
 
         // Inizializza il servizio delle notifiche
@@ -152,13 +152,6 @@ class App {
     startTimers() {
         const notificationConfig = Config.getNotificationConfig();
 
-        // Log dello stato iniziale
-        if (notificationConfig.debug) {
-            console.log('Avvio timers con configurazione:', notificationConfig);
-            console.log('Stato permessi notifiche:', Notification.permission);
-            console.log('Numero promemoria:', this.reminders.length);
-        }
-
         // Ferma eventuali timer esistenti
         this.stopTimers();
 
@@ -169,11 +162,6 @@ class App {
         // Imposta gli intervalli di controllo
         this.checkInterval = setInterval(() => this.checkReminders(), notificationConfig.checkInterval);
         this.resetInterval = setInterval(() => this.resetNotificationStatus(), notificationConfig.resetInterval);
-
-        // Log di conferma
-        if (notificationConfig.debug) {
-            console.log(`Timer avviati: controllo ogni ${notificationConfig.checkInterval / 1000}s, reset ogni ${notificationConfig.resetInterval / 1000}s`);
-        }
     }
 
     /**
@@ -261,15 +249,6 @@ class App {
                 this.reminders.push(reminder);
             }
 
-            // Debug log
-            console.log('Promemoria salvato:', {
-                title,
-                timeConfig,
-                days,
-                status: this.editingReminder ? this.editingReminder.status : 'pending',
-                history: this.editingReminder ? this.editingReminder.history : []
-            });
-
             this.saveAndRender();
             this.resetForm();
             this.modal.close();
@@ -336,17 +315,9 @@ class App {
         const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' });
         const notificationConfig = Config.getNotificationConfig();
 
-        if (notificationConfig.debug) {
-            console.log(`[${now.toLocaleTimeString()}] Controllo promemoria...`);
-        }
-
         for (const reminder of this.reminders) {
             try {
                 if (reminder.shouldNotify(currentDay, now)) {
-                    if (notificationConfig.debug) {
-                        console.log(`Tentativo di notifica per: ${reminder.title}`);
-                    }
-
                     const notified = await NotificationService.notify(reminder, (reminder) => {
                         if (this.notificationModal) {
                             this.notificationModal.show(reminder);
@@ -358,9 +329,6 @@ class App {
                     if (notified) {
                         reminder.status = 'notified';
                         this.saveAndRender();
-                        if (notificationConfig.debug) {
-                            console.log(`Notifica inviata con successo per: ${reminder.title}`);
-                        }
                     } else {
                         console.warn(`Impossibile notificare il promemoria: ${reminder.title}`);
                     }
@@ -376,22 +344,11 @@ class App {
      */
     resetNotificationStatus() {
         const now = new Date();
-        const notificationConfig = Config.getNotificationConfig();
-
-        // Reset a mezzanotte
         if (now.getHours() === 0 && now.getMinutes() === 0) {
-            if (notificationConfig.debug) {
-                console.log('Reset dello stato delle notifiche...');
-            }
-
             this.reminders.forEach(reminder => {
                 reminder.status = 'pending';
             });
             this.saveAndRender();
-
-            if (notificationConfig.debug) {
-                console.log('Reset completato');
-            }
         }
     }
 
@@ -435,11 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registrato con successo:', registration.scope);
-            })
             .catch(error => {
-                console.log('Registrazione ServiceWorker fallita:', error);
+                console.error('Registrazione ServiceWorker fallita:', error);
             });
     });
 }
