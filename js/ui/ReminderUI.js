@@ -10,10 +10,11 @@ export class ReminderUI {
      * @param {Function} onDelete - Callback per l'eliminazione
      * @param {Function} onComplete - Callback per il completamento
      * @param {Function} onPostpone - Callback per il posticipo
+     * @param {Function} onReject - Callback per il rifiuto
      */
-    constructor(containerId, { onEdit, onDelete, onComplete, onPostpone }) {
+    constructor(containerId, { onEdit, onDelete, onComplete, onPostpone, onReject }) {
         this.container = document.getElementById(containerId);
-        this.callbacks = { onEdit, onDelete, onComplete, onPostpone };
+        this.callbacks = { onEdit, onDelete, onComplete, onPostpone, onReject };
     }
 
     /**
