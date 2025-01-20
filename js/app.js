@@ -7,6 +7,7 @@ import { ThemeManager } from './ui/ThemeManager.js';
 import { TimeInputManager } from './ui/TimeInputManager.js';
 import { ReminderUI } from './ui/ReminderUI.js';
 import { NotificationModal } from './ui/NotificationModal.js';
+import { DialogModal } from './ui/DialogModal.js';
 
 /**
  * Classe principale dell'applicazione
@@ -67,6 +68,9 @@ class App {
             onPostpone: (reminder, minutes) => this.postponeReminder(reminder, minutes),
             onReject: reminder => this.rejectReminder(reminder)
         });
+
+        // Inizializza la modal di dialogo
+        this.dialogModal = new DialogModal();
 
         // Inizializza l'interfaccia dei promemoria
         this.reminderUI = new ReminderUI('reminders-list', {
@@ -276,10 +280,14 @@ class App {
      * Elimina un promemoria
      * @param {Reminder} reminder
      */
-    deleteReminder(reminder) {
-        if (confirm('Sei sicuro di voler eliminare questo promemoria?')) {
-            this.reminders = this.reminders.filter(r => r !== reminder);
-            this.saveAndRender();
+    async deleteReminder(reminder) {
+        const confirmed = await this.dialogModal.showConfirm('Sei sicuro di voler eliminare questo promemoria?');
+        if (confirmed) {
+            const index = this.reminders.indexOf(reminder);
+            if (index !== -1) {
+                this.reminders.splice(index, 1);
+                this.saveAndRender();
+            }
         }
     }
 
@@ -306,9 +314,12 @@ class App {
      * @param {Reminder} reminder
      * @param {number} minutes - Minuti di posticipo (opzionale)
      */
-    postponeReminder(reminder, minutes = null) {
+    async postponeReminder(reminder, minutes = null) {
         if (minutes === null) {
-            minutes = parseInt(prompt('Di quanti minuti vuoi posticipare il promemoria?', '15'));
+            const result = await this.dialogModal.showPrompt('Di quanti minuti vuoi posticipare il promemoria?', '15');
+            if (result !== false) {
+                minutes = parseInt(result);
+            }
         }
 
         if (minutes && !isNaN(minutes)) {
