@@ -75,6 +75,33 @@ export class ReminderUI {
                         <span class="px-2.5 py-0.5 rounded-full text-xs ${statusClass}">
                             ${statusText}
                         </span>
+                        <div class="flex items-center space-x-1">
+                            ${reminder.status !== 'notified' ? `
+                                <button class="complete-reminder p-1.5 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Esegui ora">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M7 4.5c0-1.4 1.6-2.2 2.7-1.3l9.4 7c.8.6.8 1.9 0 2.5l-9.4 7c-1.1.8-2.7 0-2.7-1.3V4.5z"/>
+                                    </svg>
+                                </button>
+                            ` : `
+                                <button class="complete-reminder p-1.5 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Completa">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </button>
+                            `}
+                            ${reminder.status === 'notified' ? `
+                                <button class="reject-reminder p-1.5 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Rifiuta">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                                <button class="postpone-reminder p-1.5 text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors" title="Posticipa">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                     <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         ${this.formatDays(reminder.days)}
@@ -92,23 +119,6 @@ export class ReminderUI {
                     ` : ''}
                 </div>
                 <div class="flex items-center space-x-2">
-                    ${reminder.status === 'notified' ? `
-                        <button class="complete-reminder p-2 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Completa">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </button>
-                        <button class="reject-reminder p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Rifiuta">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <button class="postpone-reminder p-2 text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors" title="Posticipa">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </button>
-                    ` : ''}
                     <button class="edit-reminder p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Modifica">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -148,18 +158,9 @@ export class ReminderUI {
 
         editButton.addEventListener('click', () => this.callbacks.onEdit(reminder));
         deleteButton.addEventListener('click', () => this.callbacks.onDelete(reminder));
-
-        if (completeButton) {
-            completeButton.addEventListener('click', () => this.callbacks.onComplete(reminder));
-        }
-
-        if (rejectButton) {
-            rejectButton.addEventListener('click', () => this.callbacks.onReject(reminder));
-        }
-
-        if (postponeButton) {
-            postponeButton.addEventListener('click', () => this.callbacks.onPostpone(reminder));
-        }
+        if (completeButton) completeButton.addEventListener('click', () => this.callbacks.onComplete(reminder));
+        if (rejectButton) rejectButton.addEventListener('click', () => this.callbacks.onReject(reminder));
+        if (postponeButton) postponeButton.addEventListener('click', () => this.callbacks.onPostpone(reminder));
 
         // Debug log
         console.log('Rendering reminder:', {
