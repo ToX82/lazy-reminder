@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lazy-reminder-v1';
+const CACHE_NAME = 'lazy-reminder-v2';
 const ASSETS_TO_CACHE = [
     '.',
     'index.html',
@@ -25,6 +25,9 @@ const ASSETS_TO_CACHE = [
     'icons/icon-384x384.png',
     'icons/icon-512x512.png'
 ];
+
+// Variabile per controllare l'ambiente di sviluppo
+const IS_DEV = true; // Imposta su false in produzione
 
 // Installazione del Service Worker
 self.addEventListener('install', (event) => {
@@ -53,6 +56,12 @@ self.addEventListener('activate', (event) => {
 
 // Gestione delle richieste di rete
 self.addEventListener('fetch', (event) => {
+    if (IS_DEV) {
+        // In modalità sviluppo, ignora la cache
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
