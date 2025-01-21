@@ -390,6 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Registrazione del Service Worker
 if ('serviceWorker' in navigator) {
+    console.log('ServiceWorker is disabled');
+    return;
+
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
             .catch(error => {
