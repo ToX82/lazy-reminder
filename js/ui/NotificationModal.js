@@ -1,115 +1,154 @@
+import { BaseModal } from './BaseModal.js';
+
 /**
- * Classe per la gestione della modal delle notifiche
+ * Modal per la gestione delle notifiche dei promemoria
  */
-export class NotificationModal {
+export class NotificationModal extends BaseModal {
     /**
      * @param {Object} options - Opzioni di configurazione
      * @param {Function} options.onComplete - Callback per il completamento
      * @param {Function} options.onPostpone - Callback per il posticipo
+     * @param {Function} options.onReject - Callback per il rifiuto
      */
-    constructor({ onComplete, onPostpone }) {
-        this.createModal();
-        this.onComplete = onComplete;
-        this.onPostpone = onPostpone;
+    constructor(options) {
+        super({ id: 'notification-modal' });
+        this.callbacks = options;
         this.currentReminder = null;
         this.initializeEventListeners();
     }
 
     /**
-     * Crea la struttura HTML della modal
+     * Restituisce il contenuto HTML della modal
      */
-    createModal() {
-        const modal = document.createElement('div');
-        modal.id = 'notification-modal';
-        modal.className = 'fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 hidden transition-opacity z-50';
-
-        modal.innerHTML = `
-            <div class="fixed inset-0 overflow-y-auto">
-                <div class="flex min-h-full items-center justify-center p-4">
-                    <div class="modal-content relative transform overflow-hidden rounded-xl bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full max-w-md animate-modal-open">
-                        <div class="p-6">
-                            <div class="flex items-center mb-4">
-                                <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Promemoria</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400" id="notification-title"></p>
-                                </div>
-                            </div>
-
-                            <div class="mt-6 flex flex-col gap-3">
-                                <button id="complete-notification" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Completa
-                                </button>
-
-                                <div class="flex gap-3">
-                                    <select id="postpone-time" class="flex-1 rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white text-sm transition-colors">
-                                        <option value="5">5 minuti</option>
-                                        <option value="15">15 minuti</option>
-                                        <option value="30">30 minuti</option>
-                                        <option value="60">1 ora</option>
-                                    </select>
-
-                                    <button id="postpone-notification" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        Posticipa
-                                    </button>
-                                </div>
-                            </div>
+    getModalContent() {
+        return `
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Promemoria</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400" id="notification-title"></p>
+                        </div>
+                    </div>
+                    <button type="button" id="close-notification" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <span class="sr-only">Chiudi</span>
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-6 flex flex-col gap-3">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Di quanti minuti vuoi posticipare il promemoria?</p>
+
+                    <div class="flex gap-3">
+                        <div class="flex-1">
+                            <input type="number" id="postpone-custom-time" placeholder="Minuti" min="1" value="15" class="w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white text-sm transition-colors">
+                        </div>
+
+                        <button id="postpone-notification" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Posticipa
+                        </button>
                     </div>
                 </div>
             </div>
         `;
-
-        document.body.appendChild(modal);
-        this.modal = modal;
     }
 
     /**
-     * Inizializza gli event listener
+     * Inizializza gli event listener specifici
      */
     initializeEventListeners() {
-        const completeButton = document.getElementById('complete-notification');
         const postponeButton = document.getElementById('postpone-notification');
-        const postponeSelect = document.getElementById('postpone-time');
+        const postponeInput = document.getElementById('postpone-custom-time');
+        const closeButton = document.getElementById('close-notification');
 
-        completeButton.addEventListener('click', () => {
-            if (this.currentReminder) {
-                this.onComplete(this.currentReminder);
+        if (!postponeButton || !postponeInput || !closeButton) {
+            console.error('Elementi della modal non trovati');
+            return;
+        }
+
+        // Rimuovi eventuali listener esistenti
+        this.removeEventListeners();
+
+        // Salva i riferimenti per la rimozione
+        this.handlePostpone = () => {
+            if (this.currentReminder && this.callbacks.onPostpone) {
+                const minutes = parseInt(postponeInput.value);
+
+                if (isNaN(minutes) || minutes < 1) {
+                    alert('Inserisci un numero valido di minuti (minimo 1)');
+                    return;
+                }
+
+                this.callbacks.onPostpone(this.currentReminder, minutes);
                 this.hide();
+            }
+        };
+
+        this.handleClose = () => {
+            this.hide();
+        };
+
+        // Aggiungi gli event listener
+        postponeButton.addEventListener('click', this.handlePostpone);
+        closeButton.addEventListener('click', this.handleClose);
+
+        // Gestione invio da tastiera per l'input
+        postponeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.handlePostpone();
             }
         });
 
-        postponeButton.addEventListener('click', () => {
-            if (this.currentReminder) {
-                const minutes = parseInt(postponeSelect.value);
-                this.onPostpone(this.currentReminder, minutes);
-                this.hide();
-            }
-        });
-
-        // Chiudi la modal cliccando fuori
-        this.modal.addEventListener('click', (e) => {
+        // Aggiungi handler per click fuori e ESC
+        this.handleOutsideClick = (e) => {
             if (e.target === this.modal) {
-                this.hide();
+                this.handleClose();
             }
-        });
+        };
 
-        // Chiudi con ESC
-        document.addEventListener('keydown', (e) => {
+        this.handleEscape = (e) => {
             if (e.key === 'Escape' && !this.modal.classList.contains('hidden')) {
-                this.hide();
+                this.handleClose();
             }
-        });
+        };
+
+        this.modal.addEventListener('click', this.handleOutsideClick);
+        document.addEventListener('keydown', this.handleEscape);
+    }
+
+    /**
+     * Rimuove gli event listener
+     */
+    removeEventListeners() {
+        const postponeButton = document.getElementById('postpone-notification');
+        const postponeInput = document.getElementById('postpone-custom-time');
+        const closeButton = document.getElementById('close-notification');
+
+        if (!postponeButton || !postponeInput || !closeButton) return;
+
+        if (this.handlePostpone) {
+            postponeButton.removeEventListener('click', this.handlePostpone);
+        }
+        if (this.handleClose) {
+            closeButton.removeEventListener('click', this.handleClose);
+        }
+        if (this.handleOutsideClick) {
+            this.modal.removeEventListener('click', this.handleOutsideClick);
+        }
+        if (this.handleEscape) {
+            document.removeEventListener('keydown', this.handleEscape);
+        }
     }
 
     /**
@@ -117,18 +156,27 @@ export class NotificationModal {
      * @param {Reminder} reminder - Il promemoria da mostrare
      */
     show(reminder) {
+        if (!reminder) {
+            console.error('Nessun promemoria fornito');
+            return;
+        }
+
         this.currentReminder = reminder;
-        document.getElementById('notification-title').textContent = reminder.title;
-        this.modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        const titleElement = document.getElementById('notification-title');
+        if (titleElement) {
+            titleElement.textContent = reminder.title;
+        }
+
+        this.initializeEventListeners(); // Reinizializza i listener
+        super.show();
     }
 
     /**
      * Nasconde la modal
      */
     hide() {
-        this.modal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
+        super.hide();
+        this.removeEventListeners();
         this.currentReminder = null;
     }
 }

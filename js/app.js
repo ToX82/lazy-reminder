@@ -294,11 +294,9 @@ class App {
      * @param {number} minutes - Minuti di posticipo (opzionale)
      */
     async postponeReminder(reminder, minutes = null) {
-        if (minutes === null) {
-            const result = await this.dialogModal.showPrompt('Di quanti minuti vuoi posticipare il promemoria?', '15');
-            if (result !== false) {
-                minutes = parseInt(result);
-            }
+        if (minutes === null && this.notificationModal) {
+            this.notificationModal.show(reminder);
+            return;
         }
 
         if (minutes && !isNaN(minutes)) {
